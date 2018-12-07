@@ -26,10 +26,16 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        dialog.cpp
+        dialog.cpp \
+    model.cpp \
+    controller.cpp \
+    updater.cpp
 
 HEADERS += \
-        dialog.h
+        dialog.h \
+    model.h \
+    controller.h \
+    updater.h
 
 FORMS += \
         dialog.ui

@@ -2,18 +2,25 @@
 #define DIALOG_H
 
 #include <QDialog>
+#include "model.h"
+#include "controller.h"
+#include "updater.h"
 
 namespace Ui {
 class Dialog;
 }
 
-class Dialog : public QDialog
+class Dialog : public QDialog, public Updater
 {
     Q_OBJECT
 
 public:
     explicit Dialog(QWidget *parent = nullptr);
     ~Dialog();
+
+    virtual void update_input_line(const QString& input_line);
+    virtual void disable_comma();
+    virtual void enable_comma();
 
 private slots:
     void on_pushButton_1_clicked();
@@ -54,8 +61,12 @@ private slots:
 
     void on_pushButton_neu_clicked();
 
-private:
+protected:
     Ui::Dialog *ui;
+
+private:
+    Model* m_model;
+    Controller* m_controller;
 };
 
 #endif // DIALOG_H
