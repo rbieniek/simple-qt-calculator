@@ -21,6 +21,8 @@ public:
     virtual void update_input_line(const QString& input_line);
     virtual void disable_comma();
     virtual void enable_comma();
+    virtual void disable_negativ();
+    virtual void enable_negativ();
 
 private slots:
     void on_pushButton_1_clicked();

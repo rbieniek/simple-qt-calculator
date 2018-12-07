@@ -11,6 +11,7 @@ public:
     void add_digit(const QChar digit);
     void add_comma();
     void clear_input_line();
+    void toggle_sign();
 
 private:
     Updater* m_updater;

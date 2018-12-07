@@ -11,7 +11,7 @@ Dialog::Dialog(QWidget *parent) :
     m_model = new Model(this);
     m_controller = new Controller(m_model);
 
-    disable_comma();
+    m_model->clear_input_line();
 }
 
 Dialog::~Dialog()
@@ -98,7 +98,7 @@ void Dialog::on_pushButton_0_clicked()
 void Dialog::on_pushButton_negativ_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("-"));
-
+    m_model->toggle_sign();
 }
 
 void Dialog::on_pushButton_plus_clicked()
@@ -156,4 +156,12 @@ void Dialog::enable_comma() {
 
 void Dialog::update_input_line(const QString& input_line) {
     ui->lineEdit_Eingabe->setText(input_line);
+}
+
+void Dialog::disable_negativ() {
+    ui->pushButton_negativ->setEnabled(false);
+}
+
+void Dialog::enable_negativ() {
+    ui->pushButton_negativ->setEnabled(true);
 }
