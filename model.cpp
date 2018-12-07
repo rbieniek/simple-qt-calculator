@@ -13,6 +13,7 @@ void Model::add_digit(const QChar digit) {
 
     m_updater->update_input_line(m_input_line);
     m_updater->enable_negativ();
+    m_updater->enable_operationen();
 }
 
 void Model::add_comma() {
@@ -27,6 +28,7 @@ void Model::clear_input_line() {
 
     m_updater->disable_comma();
     m_updater->disable_negativ();
+    m_updater->disable_operationen();
     m_updater->update_input_line(m_input_line);
 }
 

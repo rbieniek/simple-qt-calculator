@@ -12,6 +12,8 @@ public:
     virtual void enable_comma() = 0;
     virtual void disable_negativ() = 0;
     virtual void enable_negativ() = 0;
+    virtual void enable_operationen() = 0;
+    virtual void disable_operationen() = 0;
 };
 
 #endif // UPDATER_H

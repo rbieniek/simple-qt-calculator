@@ -23,6 +23,8 @@ public:
     virtual void enable_comma();
     virtual void disable_negativ();
     virtual void enable_negativ();
+    virtual void enable_operationen();
+    virtual void disable_operationen();
 
 private slots:
     void on_pushButton_1_clicked();
@@ -62,6 +64,10 @@ private slots:
     void on_pushButton_loeschen_clicked();
 
     void on_pushButton_neu_clicked();
+
+    void on_pushButton_sqrt_clicked();
+
+    void on_pushButton_power2_clicked();
 
 protected:
     Ui::Dialog *ui;

@@ -104,25 +104,25 @@ void Dialog::on_pushButton_negativ_clicked()
 void Dialog::on_pushButton_plus_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("+"));
-
+    m_controller->berechne_operation('+');
 }
 
 void Dialog::on_pushButton_minus_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("-"));
-
+    m_controller->berechne_operation('-');
 }
 
 void Dialog::on_pushButton_mal_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("*"));
-
+    m_controller->berechne_operation('*');
 }
 
 void Dialog::on_pushButto_geteilt_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("/"));
-
+    m_controller->berechne_operation('/');
 }
 
 void Dialog::on_pushButton_gleich_clicked()
@@ -164,4 +164,35 @@ void Dialog::disable_negativ() {
 
 void Dialog::enable_negativ() {
     ui->pushButton_negativ->setEnabled(true);
+}
+
+void Dialog::disable_operationen() {
+    ui->pushButto_geteilt->setEnabled(false);
+    ui->pushButton_gleich->setEnabled(false);
+    ui->pushButton_mal->setEnabled(false);
+    ui->pushButton_minus->setEnabled(false);
+    ui->pushButton_plus->setEnabled(false);
+    ui->pushButton_power2->setEnabled(false);
+    ui->pushButton_sqrt->setEnabled(false);
+}
+
+void Dialog::enable_operationen() {
+    ui->pushButto_geteilt->setEnabled(m_model->get_division_erlaubt());
+    ui->pushButton_gleich->setEnabled(m_model->get_zwischen_ergebnis_vorhanden());
+    ui->pushButton_mal->setEnabled(true);
+    ui->pushButton_minus->setEnabled(true);
+    ui->pushButton_plus->setEnabled(true);
+    ui->pushButton_power2->setEnabled(true);
+    ui->pushButton_sqrt->setEnabled(true);
+}
+
+
+void Dialog::on_pushButton_sqrt_clicked()
+{
+
+}
+
+void Dialog::on_pushButton_power2_clicked()
+{
+
 }

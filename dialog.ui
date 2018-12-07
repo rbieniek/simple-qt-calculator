@@ -221,7 +221,7 @@
     <string>=</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_17">
+  <widget class="QPushButton" name="pushButton_power2">
    <property name="geometry">
     <rect>
      <x>370</x>
@@ -234,7 +234,7 @@
     <string>^2</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_18">
+  <widget class="QPushButton" name="pushButton_sqrt">
    <property name="geometry">
     <rect>
      <x>370</x>
@@ -244,10 +244,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>^-2</string>
+    <string>sqrt</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="textEdit_Rechenschritte">
+  <widget class="QPlainTextEdit" name="plainTextEdit_Rechenschritte">
    <property name="geometry">
     <rect>
      <x>20</x>
