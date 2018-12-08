@@ -137,6 +137,7 @@ void Dialog::on_pushButton_loeschen_clicked()
 {
 //    ui->lineEdit_Eingabe->backspace();
     m_model->clear_input_line();
+    m_model->clear_vorherige_operation();
 }
 
 void Dialog::on_pushButton_neu_clicked()
