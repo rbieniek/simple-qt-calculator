@@ -35,7 +35,8 @@ HEADERS += \
         dialog.h \
     model.h \
     controller.h \
-    updater.h
+    updater.h \
+    operation.h
 
 FORMS += \
         dialog.ui

@@ -14,6 +14,9 @@ public:
     virtual void enable_negativ() = 0;
     virtual void enable_operationen() = 0;
     virtual void disable_operationen() = 0;
+    virtual void enable_equal() = 0;
+    virtual void disable_equal() = 0;
+    virtual void show_expression(const QString& expression) = 0;
 };
 
 #endif // UPDATER_H

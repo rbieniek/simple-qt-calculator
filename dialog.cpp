@@ -12,6 +12,7 @@ Dialog::Dialog(QWidget *parent) :
     m_controller = new Controller(m_model);
 
     m_model->clear_input_line();
+    m_model->clear_vorherige_operation();
 }
 
 Dialog::~Dialog()
@@ -104,32 +105,32 @@ void Dialog::on_pushButton_negativ_clicked()
 void Dialog::on_pushButton_plus_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("+"));
-    m_controller->berechne_operation('+');
+    m_controller->operation_ausfuehren(operation_t::PLUS);
 }
 
 void Dialog::on_pushButton_minus_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("-"));
-    m_controller->berechne_operation('-');
+    m_controller->operation_ausfuehren(operation_t::MINUS);
 }
 
 void Dialog::on_pushButton_mal_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("*"));
-    m_controller->berechne_operation('*');
+    m_controller->operation_ausfuehren(operation_t::MULT);
 }
 
 void Dialog::on_pushButto_geteilt_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("/"));
-    m_controller->berechne_operation('/');
+    m_controller->operation_ausfuehren(operation_t::DIV);
 }
 
 void Dialog::on_pushButton_gleich_clicked()
 {
 //    double E;
 //          E = ui->lineEdit_Eingabe->text().toDouble();
-
+    m_controller->berechne_gesamt();
 }
 
 void Dialog::on_pushButton_loeschen_clicked()
@@ -143,7 +144,9 @@ void Dialog::on_pushButton_neu_clicked()
 // ui->lineEdit_Eingabe->clear();
 // ui->textEdit_Rechenschritte->clear();
 
-
+    m_model->clear_input_line();
+    m_model->clear_vorherige_operation();
+    ui->plainTextEdit_Rechenschritte->clear();
 }
 
 void Dialog::disable_comma() {
@@ -168,7 +171,6 @@ void Dialog::enable_negativ() {
 
 void Dialog::disable_operationen() {
     ui->pushButto_geteilt->setEnabled(false);
-    ui->pushButton_gleich->setEnabled(false);
     ui->pushButton_mal->setEnabled(false);
     ui->pushButton_minus->setEnabled(false);
     ui->pushButton_plus->setEnabled(false);
@@ -177,8 +179,7 @@ void Dialog::disable_operationen() {
 }
 
 void Dialog::enable_operationen() {
-    ui->pushButto_geteilt->setEnabled(m_model->get_division_erlaubt());
-    ui->pushButton_gleich->setEnabled(m_model->get_zwischen_ergebnis_vorhanden());
+    ui->pushButto_geteilt->setEnabled(true);
     ui->pushButton_mal->setEnabled(true);
     ui->pushButton_minus->setEnabled(true);
     ui->pushButton_plus->setEnabled(true);
@@ -186,6 +187,17 @@ void Dialog::enable_operationen() {
     ui->pushButton_sqrt->setEnabled(true);
 }
 
+void Dialog::enable_equal() {
+    ui->pushButton_gleich->setEnabled(true);
+}
+
+void Dialog::disable_equal() {
+    ui->pushButton_gleich->setEnabled(false);
+}
+
+void Dialog::show_expression(const QString& expression) {
+    ui->plainTextEdit_Rechenschritte->appendPlainText(expression);
+}
 
 void Dialog::on_pushButton_sqrt_clicked()
 {

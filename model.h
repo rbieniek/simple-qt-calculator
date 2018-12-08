@@ -3,6 +3,7 @@
 
 #include <qstring.h>
 #include "updater.h"
+#include "operation.h"
 
 class Model {
 public:
@@ -13,6 +14,8 @@ public:
     void clear_input_line();
     void toggle_sign();
 
+    void operation_anzeigen(const double operand, const double ergebnis);
+
     double get_eingabe_wert(bool *ok=nullptr) {
         return m_input_line.toDouble(ok);
     }
@@ -21,17 +24,24 @@ public:
         return m_zwischen_ergebnis;
     }
 
-    bool get_zwischen_ergebnis_vorhanden() {
-        return m_zwischen_ergebnis_vorhanden;
+    operation_t get_vorherige_operation() {
+        return m_vorherige_operation;
     }
 
-    bool get_division_erlaubt() {
-        return m_zwischen_ergebnis != 0.0;
+    bool get_vorherige_operation_vorhanden() {
+        return m_vorherige_operation != operation_t::NONE;
+    }
+
+    void set_vorherige_operation(const operation_t operation) {
+        m_vorherige_operation = operation;
     }
 
     void set_zwischen_ergebnis(double value) {
         m_zwischen_ergebnis = value;
-        m_zwischen_ergebnis_vorhanden = true;
+    }
+
+    void clear_vorherige_operation() {
+        m_vorherige_operation = operation_t::NONE;
     }
 
 private:
@@ -40,7 +50,9 @@ private:
     QString m_input_line;
 
     double m_zwischen_ergebnis;
-    bool m_zwischen_ergebnis_vorhanden = false;
+    operation_t m_vorherige_operation = operation_t::NONE;
+
+    char vorherige_operation_drucken();
 };
 
 #endif // MODEL_H

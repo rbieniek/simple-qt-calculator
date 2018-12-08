@@ -25,6 +25,9 @@ public:
     virtual void enable_negativ();
     virtual void enable_operationen();
     virtual void disable_operationen();
+    virtual void show_expression(const QString& expression);
+    virtual void enable_equal();
+    virtual void disable_equal();
 
 private slots:
     void on_pushButton_1_clicked();

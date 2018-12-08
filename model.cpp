@@ -1,3 +1,4 @@
+#include <qtextstream.h>
 #include "model.h"
 
 Model::Model(Updater* updater) : m_updater(updater) {
@@ -13,11 +14,24 @@ void Model::add_digit(const QChar digit) {
 
     m_updater->update_input_line(m_input_line);
     m_updater->enable_negativ();
-    m_updater->enable_operationen();
+
+    bool ok = false;
+    double aktueller_wert = m_input_line.toDouble(&ok);
+
+    if(ok && (m_vorherige_operation != operation_t::DIV || aktueller_wert != 0.0)) {
+        m_updater->enable_operationen();
+
+        if(get_vorherige_operation_vorhanden()) {
+            m_updater->enable_equal();
+        }
+    } else {
+        m_updater->disable_operationen();
+        m_updater->disable_equal();
+    }
 }
 
 void Model::add_comma() {
-    m_input_line.append(',');
+    m_input_line.append('.');
 
     m_updater->disable_comma();
     m_updater->update_input_line(m_input_line);
@@ -29,6 +43,7 @@ void Model::clear_input_line() {
     m_updater->disable_comma();
     m_updater->disable_negativ();
     m_updater->disable_operationen();
+    m_updater->disable_equal();
     m_updater->update_input_line(m_input_line);
 }
 
@@ -41,5 +56,27 @@ void Model::toggle_sign() {
         }
 
         m_updater->update_input_line(m_input_line);
+    }
+}
+
+void Model::operation_anzeigen(const double operand, const double ergebnis) {
+    QString result;
+    QTextStream(&result) << m_zwischen_ergebnis << vorherige_operation_drucken() << operand << "=" << ergebnis;
+
+    m_updater->show_expression(result);
+}
+
+char Model::vorherige_operation_drucken() {
+    switch (m_vorherige_operation) {
+    case DIV:
+        return '/';
+    case MINUS:
+        return '-';
+    case MULT:
+        return '*';
+    case PLUS:
+        return '+';
+    default:
+        return ' ';
     }
 }
