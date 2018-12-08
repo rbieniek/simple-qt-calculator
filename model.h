@@ -53,6 +53,7 @@ private:
     operation_t m_vorherige_operation = operation_t::NONE;
 
     char vorherige_operation_drucken();
+    QString build_input_line();
 };
 
 #endif // MODEL_H

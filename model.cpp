@@ -12,16 +12,7 @@ void Model::add_digit(const QChar digit) {
         m_updater->enable_comma();
     }
 
-    if(get_vorherige_operation_vorhanden()) {
-        QString new_input_line;
-
-        QTextStream(&new_input_line) << get_zwischen_ergebnis() << vorherige_operation_drucken() << m_input_line;
-
-        m_updater->update_input_line(new_input_line);
-    } else {
-        m_updater->update_input_line(m_input_line);
-    }
-
+    m_updater->update_input_line(build_input_line());
     m_updater->enable_negativ();
 
     bool ok = false;
@@ -43,7 +34,7 @@ void Model::add_comma() {
     m_input_line.append('.');
 
     m_updater->disable_comma();
-    m_updater->update_input_line(m_input_line);
+    m_updater->update_input_line(build_input_line());
 }
 
 void Model::clear_input_line() {
@@ -54,15 +45,7 @@ void Model::clear_input_line() {
     m_updater->disable_operationen();
     m_updater->disable_equal();
 
-    if(get_vorherige_operation_vorhanden()) {
-        QString new_input_line;
-
-        QTextStream(&new_input_line) << get_zwischen_ergebnis() << vorherige_operation_drucken() << m_input_line;
-
-        m_updater->update_input_line(new_input_line);
-    } else {
-        m_updater->update_input_line(m_input_line);
-    }
+    m_updater->update_input_line(build_input_line());
 }
 
 void Model::toggle_sign() {
@@ -73,7 +56,7 @@ void Model::toggle_sign() {
             m_input_line.insert(0, '-');
         }
 
-        m_updater->update_input_line(m_input_line);
+        m_updater->update_input_line(build_input_line());
     }
 }
 
@@ -97,4 +80,17 @@ char Model::vorherige_operation_drucken() {
     default:
         return ' ';
     }
+}
+
+QString Model::build_input_line() {
+    if(get_vorherige_operation_vorhanden()) {
+        QString new_input_line;
+
+        QTextStream(&new_input_line) << get_zwischen_ergebnis() << vorherige_operation_drucken() << m_input_line;
+
+        return new_input_line;
+    } else {
+        return m_input_line;
+    }
+
 }
