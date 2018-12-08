@@ -12,7 +12,16 @@ void Model::add_digit(const QChar digit) {
         m_updater->enable_comma();
     }
 
-    m_updater->update_input_line(m_input_line);
+    if(get_vorherige_operation_vorhanden()) {
+        QString new_input_line;
+
+        QTextStream(&new_input_line) << get_zwischen_ergebnis() << vorherige_operation_drucken() << m_input_line;
+
+        m_updater->update_input_line(new_input_line);
+    } else {
+        m_updater->update_input_line(m_input_line);
+    }
+
     m_updater->enable_negativ();
 
     bool ok = false;
@@ -44,7 +53,16 @@ void Model::clear_input_line() {
     m_updater->disable_negativ();
     m_updater->disable_operationen();
     m_updater->disable_equal();
-    m_updater->update_input_line(m_input_line);
+
+    if(get_vorherige_operation_vorhanden()) {
+        QString new_input_line;
+
+        QTextStream(&new_input_line) << get_zwischen_ergebnis() << vorherige_operation_drucken() << m_input_line;
+
+        m_updater->update_input_line(new_input_line);
+    } else {
+        m_updater->update_input_line(m_input_line);
+    }
 }
 
 void Model::toggle_sign() {
