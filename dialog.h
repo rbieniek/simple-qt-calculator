@@ -21,17 +21,6 @@ public:
     explicit Dialog(QWidget *parent = nullptr);
     ~Dialog();
 
-    void update_input_line(const QString& input_line);
-    void disable_comma();
-    void enable_comma();
-    void disable_negativ();
-    void enable_negativ();
-    void enable_operationen();
-    void disable_operationen();
-    void show_expression(const QString& expression);
-    void enable_equal();
-    void disable_equal();
-
 private slots:
     void on_pushButton_1_clicked();
 
@@ -89,13 +78,24 @@ private:
     void komma_hinzufuegen();
     void loesche_eingabe_zeile();
     void wechel_vorzeichen();
-    QString eingabe_zeile_darstellen();
     void operation_anzeigen(const double operand, const double ergebnis);
     void operation_ausfuehren(int operation);
     void berechne_sqrt();
     void berechne_power2();
     void berechne_gesamt();
     double berechne(const double operand);
+
+    void komma_verriegeln();
+    void komma_entriegeln();
+    void vorzeichen_verriegeln();
+    void vorzeichen_entriegeln();
+    void operation_verriegeln();
+    void operationen_entriegeln();
+    void ausdruck_anzeigen(const QString& expression);
+    void ergebnis_berechnen_entriegeln();
+    void ergebnis_berechnen_verriegeln();
+
+    QString eingabe_zeile_darstellen();
 };
 
 #endif // DIALOG_H

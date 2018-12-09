@@ -116,27 +116,23 @@ void Dialog::on_pushButton_neu_clicked()
     ui->plainTextEdit_Rechenschritte->clear();
 }
 
-void Dialog::disable_comma() {
+void Dialog::komma_verriegeln() {
     ui->pushButton_komma->setEnabled(false);
 }
 
-void Dialog::enable_comma() {
+void Dialog::komma_entriegeln() {
     ui->pushButton_komma->setEnabled(true);
 }
 
-void Dialog::update_input_line(const QString& input_line) {
-    ui->lineEdit_Eingabe->setText(input_line);
-}
-
-void Dialog::disable_negativ() {
+void Dialog::vorzeichen_verriegeln() {
     ui->pushButton_negativ->setEnabled(false);
 }
 
-void Dialog::enable_negativ() {
+void Dialog::vorzeichen_entriegeln() {
     ui->pushButton_negativ->setEnabled(true);
 }
 
-void Dialog::disable_operationen() {
+void Dialog::operation_verriegeln() {
     ui->pushButto_geteilt->setEnabled(false);
     ui->pushButton_mal->setEnabled(false);
     ui->pushButton_minus->setEnabled(false);
@@ -145,7 +141,7 @@ void Dialog::disable_operationen() {
     ui->pushButton_sqrt->setEnabled(false);
 }
 
-void Dialog::enable_operationen() {
+void Dialog::operationen_entriegeln() {
     ui->pushButto_geteilt->setEnabled(true);
     ui->pushButton_mal->setEnabled(true);
     ui->pushButton_minus->setEnabled(true);
@@ -154,15 +150,15 @@ void Dialog::enable_operationen() {
     ui->pushButton_sqrt->setEnabled(true);
 }
 
-void Dialog::enable_equal() {
+void Dialog::ergebnis_berechnen_entriegeln() {
     ui->pushButton_gleich->setEnabled(true);
 }
 
-void Dialog::disable_equal() {
+void Dialog::ergebnis_berechnen_verriegeln() {
     ui->pushButton_gleich->setEnabled(false);
 }
 
-void Dialog::show_expression(const QString& expression) {
+void Dialog::ausdruck_anzeigen(const QString& expression) {
     ui->plainTextEdit_Rechenschritte->appendPlainText(expression);
 }
 
@@ -245,44 +241,44 @@ void Dialog::berechne_sqrt() {
 void Dialog::ziffer_hinzufuegen(const QChar digit) {
     eingabe_zeile.append(digit);
 
-    if(!(eingabe_zeile.indexOf(',') >= 0)) {
-        enable_comma();
+    if(!(eingabe_zeile.indexOf('.') >= 0)) {
+        komma_entriegeln();
     }
 
-    update_input_line(eingabe_zeile_darstellen());
-    enable_negativ();
+    ui->lineEdit_Eingabe->setText(eingabe_zeile_darstellen());
+    vorzeichen_entriegeln();
 
     bool ok = false;
     double aktueller_wert = eingabe_zeile.toDouble(&ok);
 
     if(ok && (vorherige_operation != DIV || aktueller_wert != 0.0)) {
-        enable_operationen();
+        operationen_entriegeln();
 
         if(vorherige_operation != NONE) {
-            enable_equal();
+            ergebnis_berechnen_entriegeln();
         }
     } else {
-        disable_operationen();
-        disable_equal();
+        operation_verriegeln();
+        ergebnis_berechnen_verriegeln();
     }
 }
 
 void Dialog::komma_hinzufuegen() {
     eingabe_zeile.append('.');
 
-    disable_comma();
-    update_input_line(eingabe_zeile_darstellen());
+    komma_verriegeln();
+    ui->lineEdit_Eingabe->setText(eingabe_zeile_darstellen());
 }
 
 void Dialog::loesche_eingabe_zeile() {
     eingabe_zeile.clear();
 
-    disable_comma();
-    disable_negativ();
-    disable_operationen();
-    disable_equal();
+    komma_verriegeln();
+    vorzeichen_verriegeln();
+    operation_verriegeln();
+    ergebnis_berechnen_verriegeln();
 
-    update_input_line(eingabe_zeile_darstellen());
+    ui->lineEdit_Eingabe->setText(eingabe_zeile_darstellen());
 }
 
 void Dialog::wechel_vorzeichen() {
@@ -293,7 +289,7 @@ void Dialog::wechel_vorzeichen() {
             eingabe_zeile.insert(0, '-');
         }
 
-        update_input_line(eingabe_zeile_darstellen());
+        ui->lineEdit_Eingabe->setText(eingabe_zeile_darstellen());
     }
 }
 
@@ -301,7 +297,7 @@ void Dialog::operation_anzeigen(const double operand, const double ergebnis) {
     QString result;
     QTextStream(&result) << zwischen_ergebnis << vorherige_operation_drucken() << operand << "=" << ergebnis;
 
-    show_expression(result);
+    ausdruck_anzeigen(result);
 }
 
 char Dialog::vorherige_operation_drucken() {
