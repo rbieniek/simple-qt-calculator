@@ -3,9 +3,11 @@
 
 #include <QDialog>
 
-typedef enum  {
-    NONE, PLUS, MINUS, MULT, DIV
-} operation_t;
+#define NONE 0
+#define PLUS 1
+#define MINUS 2
+#define MULT 3
+#define DIV 4
 
 namespace Ui {
 class Dialog;
@@ -81,49 +83,16 @@ private:
     QString m_input_line;
 
     double m_zwischen_ergebnis;
-    operation_t m_vorherige_operation = operation_t::NONE;
+    int m_vorherige_operation = NONE;
 
     char vorherige_operation_drucken();
-
-    // model operationen
     void add_digit(const QChar digit);
     void add_comma();
     void clear_input_line();
     void toggle_sign();
     QString build_input_line();
-
     void operation_anzeigen(const double operand, const double ergebnis);
-
-    double get_eingabe_wert(bool *ok=nullptr) {
-        return m_input_line.toDouble(ok);
-    }
-
-    double get_zwischen_ergebnis() {
-        return m_zwischen_ergebnis;
-    }
-
-    operation_t get_vorherige_operation() {
-        return m_vorherige_operation;
-    }
-
-    bool get_vorherige_operation_vorhanden() {
-        return m_vorherige_operation != operation_t::NONE;
-    }
-
-    void set_vorherige_operation(const operation_t operation) {
-        m_vorherige_operation = operation;
-    }
-
-    void set_zwischen_ergebnis(double value) {
-        m_zwischen_ergebnis = value;
-    }
-
-    void clear_vorherige_operation() {
-        m_vorherige_operation = operation_t::NONE;
-    }
-
-    // controller operationen
-    void operation_ausfuehren(const operation_t operation);
+    void operation_ausfuehren(int operation);
     void berechne_sqrt();
     void berechne_power2();
     void berechne_gesamt();

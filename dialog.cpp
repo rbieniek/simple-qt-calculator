@@ -10,7 +10,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->setupUi(this);
 
     clear_input_line();
-    clear_vorherige_operation();
+    m_vorherige_operation = NONE;
 }
 
 Dialog::~Dialog()
@@ -103,25 +103,25 @@ void Dialog::on_pushButton_negativ_clicked()
 void Dialog::on_pushButton_plus_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("+"));
-    operation_ausfuehren(operation_t::PLUS);
+    operation_ausfuehren(PLUS);
 }
 
 void Dialog::on_pushButton_minus_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("-"));
-    operation_ausfuehren(operation_t::MINUS);
+    operation_ausfuehren(MINUS);
 }
 
 void Dialog::on_pushButton_mal_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("*"));
-    operation_ausfuehren(operation_t::MULT);
+    operation_ausfuehren(MULT);
 }
 
 void Dialog::on_pushButto_geteilt_clicked()
 {
 //    ui->lineEdit_Eingabe->insert(QString("/"));
-    operation_ausfuehren(operation_t::DIV);
+    operation_ausfuehren(DIV);
 }
 
 void Dialog::on_pushButton_gleich_clicked()
@@ -135,7 +135,7 @@ void Dialog::on_pushButton_loeschen_clicked()
 {
 //    ui->lineEdit_Eingabe->backspace();
     clear_input_line();
-    clear_vorherige_operation();
+    m_vorherige_operation = NONE;
 }
 
 void Dialog::on_pushButton_neu_clicked()
@@ -144,7 +144,7 @@ void Dialog::on_pushButton_neu_clicked()
 // ui->textEdit_Rechenschritte->clear();
 
     clear_input_line();
-    clear_vorherige_operation();
+    m_vorherige_operation = NONE;
     ui->plainTextEdit_Rechenschritte->clear();
 }
 
@@ -209,34 +209,34 @@ void Dialog::on_pushButton_power2_clicked()
 }
 
 // Controller operationen
-void Dialog::operation_ausfuehren(const operation_t operation) {
+void Dialog::operation_ausfuehren(int operation) {
     bool valid = false;
-    double eingabe_wert = get_eingabe_wert(&valid);
+    double eingabe_wert = m_input_line.toDouble(&valid);
 
     if(valid) {
-        if(get_vorherige_operation_vorhanden()) {
+        if(m_vorherige_operation != NONE) {
             double ergebnis = berechne(eingabe_wert);
 
             operation_anzeigen(eingabe_wert, ergebnis);
-            set_zwischen_ergebnis(ergebnis);
+            m_zwischen_ergebnis = ergebnis;
         } else {
-            set_zwischen_ergebnis(eingabe_wert);
+            m_zwischen_ergebnis = eingabe_wert;
         }
 
-        set_vorherige_operation(operation);
+        m_vorherige_operation = operation;
         clear_input_line();
     }
 }
 
 void Dialog::berechne_gesamt() {
     bool valid = false;
-    double eingabe_wert = get_eingabe_wert(&valid);
+    double eingabe_wert = m_input_line.toDouble(&valid);
 
     if(valid) {
         double ergebnis = berechne(eingabe_wert);
 
         operation_anzeigen(eingabe_wert, ergebnis);
-        clear_vorherige_operation();
+        m_vorherige_operation = NONE;
         clear_input_line();
     }
 
@@ -245,18 +245,18 @@ void Dialog::berechne_gesamt() {
 double Dialog::berechne(const double operand) {
     double ergebnis = 0.0;
 
-    switch (get_vorherige_operation()) {
+    switch (m_vorherige_operation) {
     case DIV:
-        ergebnis = get_zwischen_ergebnis() / operand;
+        ergebnis = m_zwischen_ergebnis / operand;
         break;
     case MINUS:
-        ergebnis = get_zwischen_ergebnis() - operand;
+        ergebnis = m_zwischen_ergebnis - operand;
         break;
     case MULT:
-        ergebnis = get_zwischen_ergebnis() * operand;
+        ergebnis = m_zwischen_ergebnis * operand;
         break;
     case PLUS:
-        ergebnis = get_zwischen_ergebnis() + operand;
+        ergebnis = m_zwischen_ergebnis + operand;
         break;
     default:
         break;
@@ -287,10 +287,10 @@ void Dialog::add_digit(const QChar digit) {
     bool ok = false;
     double aktueller_wert = m_input_line.toDouble(&ok);
 
-    if(ok && (m_vorherige_operation != operation_t::DIV || aktueller_wert != 0.0)) {
+    if(ok && (m_vorherige_operation != DIV || aktueller_wert != 0.0)) {
         enable_operationen();
 
-        if(get_vorherige_operation_vorhanden()) {
+        if(m_vorherige_operation != NONE) {
             enable_equal();
         }
     } else {
@@ -352,10 +352,10 @@ char Dialog::vorherige_operation_drucken() {
 }
 
 QString Dialog::build_input_line() {
-    if(get_vorherige_operation_vorhanden()) {
+    if(m_vorherige_operation != NONE) {
         QString new_input_line;
 
-        QTextStream(&new_input_line) << get_zwischen_ergebnis() << vorherige_operation_drucken() << m_input_line;
+        QTextStream(&new_input_line) << m_zwischen_ergebnis << vorherige_operation_drucken() << m_input_line;
 
         return new_input_line;
     } else {
