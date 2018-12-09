@@ -79,18 +79,17 @@ protected:
     Ui::Dialog *ui;
 
 private:
-    // model daten
-    QString m_input_line;
+    QString eingabe_zeile;
 
-    double m_zwischen_ergebnis;
-    int m_vorherige_operation = NONE;
+    double zwischen_ergebnis;
+    int vorherige_operation = NONE;
 
     char vorherige_operation_drucken();
-    void add_digit(const QChar digit);
-    void add_comma();
-    void clear_input_line();
-    void toggle_sign();
-    QString build_input_line();
+    void ziffer_hinzufuegen(const QChar digit);
+    void komma_hinzufuegen();
+    void loesche_eingabe_zeile();
+    void wechel_vorzeichen();
+    QString eingabe_zeile_darstellen();
     void operation_anzeigen(const double operand, const double ergebnis);
     void operation_ausfuehren(int operation);
     void berechne_sqrt();
