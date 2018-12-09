@@ -64,10 +64,9 @@ private slots:
 
     void on_pushButton_power2_clicked();
 
-protected:
+private:
     Ui::Dialog *ui;
 
-private:
     QString eingabe_zeile;
 
     double zwischen_ergebnis;
