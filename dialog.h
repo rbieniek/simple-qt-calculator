@@ -89,7 +89,7 @@ private:
     void vorzeichen_verriegeln();
     void vorzeichen_entriegeln();
     void operation_verriegeln();
-    void operationen_entriegeln();
+    void operationen_entriegeln(bool eingabewer_positiv);
     void ausdruck_anzeigen(const QString& expression);
     void ergebnis_berechnen_entriegeln();
     void ergebnis_berechnen_verriegeln();

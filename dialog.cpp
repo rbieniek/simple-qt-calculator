@@ -1,7 +1,7 @@
 #include <qtextstream.h>
 #include "dialog.h"
 #include "ui_dialog.h"
-#include "cmath"
+#include <cmath>
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -141,13 +141,13 @@ void Dialog::operation_verriegeln() {
     ui->pushButton_sqrt->setEnabled(false);
 }
 
-void Dialog::operationen_entriegeln() {
+void Dialog::operationen_entriegeln(bool eingabewert_positiv) {
     ui->pushButto_geteilt->setEnabled(true);
     ui->pushButton_mal->setEnabled(true);
     ui->pushButton_minus->setEnabled(true);
     ui->pushButton_plus->setEnabled(true);
     ui->pushButton_power2->setEnabled(true);
-    ui->pushButton_sqrt->setEnabled(true);
+    ui->pushButton_sqrt->setEnabled(eingabewert_positiv);
 }
 
 void Dialog::ergebnis_berechnen_entriegeln() {
@@ -164,12 +164,12 @@ void Dialog::ausdruck_anzeigen(const QString& expression) {
 
 void Dialog::on_pushButton_sqrt_clicked()
 {
-
+    berechne_sqrt();
 }
 
 void Dialog::on_pushButton_power2_clicked()
 {
-
+    berechne_power2();
 }
 
 // Controller operationen
@@ -230,11 +230,35 @@ double Dialog::berechne(const double operand) {
 }
 
 void Dialog::berechne_power2() {
+    bool ok = false;
+    double aktueller_wert = eingabe_zeile.toDouble(&ok);
 
+    if(ok) {
+        aktueller_wert = pow(aktueller_wert, 2.0);
+
+        QString neuer_eingabe_wert;
+        QTextStream(&neuer_eingabe_wert) << aktueller_wert;
+
+        eingabe_zeile = neuer_eingabe_wert;
+
+        ui->lineEdit_Eingabe->setText(eingabe_zeile_darstellen());
+    }
 }
 
 void Dialog::berechne_sqrt() {
+    bool ok = false;
+    double aktueller_wert = eingabe_zeile.toDouble(&ok);
 
+    if(ok) {
+        aktueller_wert = sqrt(aktueller_wert);
+
+        QString neuer_eingabe_wert;
+        QTextStream(&neuer_eingabe_wert) << aktueller_wert;
+
+        eingabe_zeile = neuer_eingabe_wert;
+
+        ui->lineEdit_Eingabe->setText(eingabe_zeile_darstellen());
+    }
 }
 
 // Model operationen
@@ -252,7 +276,7 @@ void Dialog::ziffer_hinzufuegen(const QChar digit) {
     double aktueller_wert = eingabe_zeile.toDouble(&ok);
 
     if(ok && (vorherige_operation != DIV || aktueller_wert != 0.0)) {
-        operationen_entriegeln();
+        operationen_entriegeln(aktueller_wert >= 0.0);
 
         if(vorherige_operation != NONE) {
             ergebnis_berechnen_entriegeln();
@@ -285,8 +309,10 @@ void Dialog::wechel_vorzeichen() {
     if(eingabe_zeile.length() > 0) {
         if(eingabe_zeile.startsWith('-')) {
             eingabe_zeile.remove(0, 1);
+            ui->pushButton_sqrt->setEnabled(true);
         } else {
             eingabe_zeile.insert(0, '-');
+            ui->pushButton_sqrt->setEnabled(false);
         }
 
         ui->lineEdit_Eingabe->setText(eingabe_zeile_darstellen());
